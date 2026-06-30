@@ -1,1 +1,50 @@
-
+{
+  "appid": "ncaclmanager",
+  "name": "ACL Manager",
+  "daemon_config_name": "docker_local",
+  "version": "1.0.0",
+  "secret": "",
+  "port": 8080,
+  "scopes": {
+    "required": [
+      "FILES",
+      "USER_INFO",
+      "USER_STATUS"
+    ],
+    "optional": [
+      "NOTIFICATIONS"
+    ]
+  },
+  "system_app": false,
+  "container_params": {
+    "image": "ncaclmanager-exapp:1.0.0",
+    "healthcheck_endpoint": "/heartbeat",
+    "net": "host",
+    "environment_variables": {
+      "DB_PATH": "/data/ncaclmanager.db"
+    },
+    "volumes": [
+      "ncaclmanager_data:/data"
+    ]
+  },
+  "routes": [
+    {
+      "url": "^/api/.*",
+      "verb": "GET,POST,DELETE,PUT",
+      "access_level": "USER",
+      "headers_to_exclude": []
+    },
+    {
+      "url": "^/ui/.*",
+      "verb": "POST",
+      "access_level": "USER",
+      "headers_to_exclude": []
+    },
+    {
+      "url": "^/static/.*",
+      "verb": "GET",
+      "access_level": "PUBLIC",
+      "headers_to_exclude": []
+    }
+  ]
+}
