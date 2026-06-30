@@ -8,11 +8,16 @@ import os
 import aiosqlite
 from src.models.settings import FullSettings, AgentSettings, AdminGroupsSettings, PathMapping
 
-DB_PATH = os.environ.get("DB_PATH", "/data/ncaclmanager.db")
+
+def _db_path() -> str:
+    """Читаем переменную окружения динамически — не на момент импорта модуля."""
+    return os.environ.get("DB_PATH", "/data/ncaclmanager.db")
 
 
 async def init_db() -> None:
-    async with aiosqlite.connect(DB_PATH) as db:
+    db_path = _db_path()
+    os.makedirs(os.path.dirname(db_path) or ".", exist_ok=True)
+    async with aiosqlite.connect(db_path) as db:
         await db.execute("""
             CREATE TABLE IF NOT EXISTS settings (
                 key   TEXT PRIMARY KEY,
@@ -23,7 +28,7 @@ async def init_db() -> None:
 
 
 async def get_settings() -> FullSettings:
-    async with aiosqlite.connect(DB_PATH) as db:
+    async with aiosqlite.connect(_db_path()) as db:
         async with db.execute("SELECT key, value FROM settings") as cur:
             rows = await cur.fetchall()
 
@@ -69,7 +74,7 @@ async def save_agent_mode(mode: str) -> None:
 
 
 async def _set(key: str, value) -> None:
-    async with aiosqlite.connect(DB_PATH) as db:
+    async with aiosqlite.connect(_db_path()) as db:
         await db.execute(
             "INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)",
             (key, json.dumps(value, ensure_ascii=False))
