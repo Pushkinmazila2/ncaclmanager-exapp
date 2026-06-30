@@ -1,1 +1,22 @@
-
+<?xml version="1.0"?>
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <id>ncaclmanager</id>
+    <name>ACL Manager</name>
+    <summary>Управление NTFS ACL правами через AD группы (ExApp)</summary>
+    <description><![CDATA[
+        ExApp для управления правами доступа на Windows шарах прямо из Nextcloud.
+        Работает как изолированный Docker контейнер через AppAPI.
+        Требует развёрнутый NcAclAgent на целевом Windows сервере.
+    ]]></description>
+    <version>1.0.0</version>
+    <licence>agpl</licence>
+    <author mail="admin@company.local">IT Department</author>
+    <namespace>NcAclManager</namespace>
+    <category>files</category>
+    <website>https://github.com/company/ncaclmanager-exapp</website>
+    <bugs>https://github.com/company/ncaclmanager-exapp/issues</bugs>
+    <dependencies>
+        <nextcloud min-version="29" max-version="34"/>
+    </dependencies>
+</info>
